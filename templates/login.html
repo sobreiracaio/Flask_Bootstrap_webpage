@@ -7,16 +7,35 @@
     <hr>
     <div class="row">
         <div class="col">
-            <form method="POST" action="" class="border p-4 mt-2">
+            <form method="POST" action="" class="border p-4 mt-2" novalidate>
+                {{form_login.csrf_token}}
                 <legend>Login</legend>
                 <fieldset>
                     <div class="form-group">
                         {{form_login.email.label(class="form-control-label")}}
-                        {{form_login.email(class="form-control")}}
+                        {% if form_login.email.errors %}
+                            {{form_login.email(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                            {% for error in form_login.email.errors %}
+                                {{error}}
+                            {% endfor %}
+                            </div>        
+                        {% else %}
+                             {{form_login.email(class="form-control")}}
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         {{form_login.password.label(class="form-control-label")}}
-                        {{form_login.password(class="form-control")}}
+                        {% if form_login.password.errors %}
+                            {{form_login.password(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                            {% for error in form_login.password.errors %}
+                                {{error}}
+                            {% endfor %}
+                            </div>        
+                        {% else %}
+                             {{form_login.password(class="form-control")}}
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         {{form_login.remember_me.label(class="form-check-label")}}
@@ -27,24 +46,61 @@
             </form>
         </div>
         <div class="col">
-            <form method="POST" action="" class="border p-4 mt-2">
+            <form method="POST" action="" class="border p-4 mt-2" novalidate>
+                {{form_login.csrf_token}}
                 <legend>Create account</legend>
                 <fieldset>
                     <div class="form-group">
                         {{form_create_acc.username.label(class="form-control-label")}}
-                        {{form_create_acc.username(class="form-control")}}
+                        {% if form_create_acc.username.errors %}
+                            {{form_create_acc.username(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                            {% for error in form_create_acc.username.errors %}
+                                {{error}}
+                            {% endfor %}
+                            </div>        
+                        {% else %}
+                             {{form_create_acc.username(class="form-control")}}
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         {{form_create_acc.email.label(class="form-control-label")}}
-                        {{form_create_acc.email(class="form-control")}}
+                        {% if form_create_acc.email.errors %}
+                            {{form_create_acc.email(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                            {% for error in form_create_acc.email.errors %}
+                                {{error}}
+                            {% endfor %}
+                            </div>        
+                        {% else %}
+                             {{form_create_acc.email(class="form-control")}}
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         {{form_create_acc.password.label(class="form-control-label")}}
-                        {{form_create_acc.password(class="form-control")}}
+                        {% if form_create_acc.password.errors %}
+                            {{form_create_acc.password(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                            {% for error in form_create_acc.password.errors %}
+                                {{error}}
+                            {% endfor %}
+                            </div>        
+                        {% else %}
+                             {{form_create_acc.password(class="form-control")}}
+                        {% endif %}
                     </div>
                     <div class="form-group">
                         {{form_create_acc.pass_confirm.label(class="form-control-label")}}
-                        {{form_create_acc.pass_confirm(class="form-control")}}
+                        {% if form_create_acc.pass_confirm.errors %}
+                            {{form_create_acc.pass_confirm(class="form-control is-invalid")}}
+                            <div class="invalid-feedback">
+                            {% for error in form_create_acc.pass_confirm.errors %}
+                                {{error}}
+                            {% endfor %}
+                            </div>        
+                        {% else %}
+                             {{form_create_acc.pass_confirm(class="form-control")}}
+                        {% endif %}
                     </div>
 
                 </fieldset>
