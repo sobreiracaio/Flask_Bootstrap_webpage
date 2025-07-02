@@ -1,4 +1,4 @@
-from main import database
+from community_site import database
 from datetime import datetime
 
 
