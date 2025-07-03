@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from community_site.models import User
+from flask_login import current_user
 
 
 class FormCreateAccount(FlaskForm):
@@ -25,3 +27,17 @@ class FormLogin(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(6, 20)])
     remember_me = BooleanField('Remember me')
     submit_button_login = SubmitField('Login')
+    
+    
+class FormEditProfile(FlaskForm):
+    
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    profile_image = FileField('Update profile image', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    submit_button_edit_profile = SubmitField('Confirm Edit')
+    
+    def validate_email(self, email):
+        if current_user.email != email.data:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError("This email belongs to another account, try a different one.")
