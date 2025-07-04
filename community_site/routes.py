@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, flash
 from community_site import app, database, bcrypt
-from community_site.forms import FormLogin, FormCreateAccount, FormEditProfile
-from community_site.models import User
+from community_site.forms import FormLogin, FormCreateAccount, FormEditProfile, FormCreatePost
+from community_site.models import User, Post
 from flask_login import login_user, logout_user, current_user, login_required
 import secrets
 import os
@@ -12,7 +12,8 @@ from PIL import Image
 
 @app.route('/')
 def home():
-    return render_template("home.html")
+    posts = Post.query.all()
+    return render_template("home.html", posts = posts)
 
 @app.route('/contact')
 def contact():
@@ -67,10 +68,17 @@ def profile():
     return render_template("profile.html", profile_photo = profile_image)
 
 
-@app.route('/post/create')
+@app.route('/post/create', methods=['GET', 'POST'])
 @login_required
 def post_create():
-    return render_template("post_create.html")
+    form_create_post = FormCreatePost()
+    if form_create_post.validate_on_submit():
+        post = Post(title= form_create_post.title.data, body = form_create_post.body.data, author = current_user)
+        database.session.add(post)
+        database.session.commit()
+        flash("Post created successfully", 'alert-success')
+        return (redirect(url_for('home')))
+    return render_template("post_create.html", form_create_post = form_create_post)
 
 
 def save_img(image):
