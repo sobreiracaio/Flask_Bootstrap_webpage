@@ -34,6 +34,12 @@ class FormEditProfile(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     profile_image = FileField('Update profile image', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    course1 = BooleanField('Course 1')
+    course2 = BooleanField('Course 2')
+    course3 = BooleanField('Course 3')
+    course4 = BooleanField('Course 4')
+    course5 = BooleanField('Course 5')
+    course6 = BooleanField('Course 6')
     submit_button_edit_profile = SubmitField('Confirm Edit')
     
     def validate_email(self, email):

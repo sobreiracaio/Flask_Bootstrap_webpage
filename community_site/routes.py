@@ -8,7 +8,7 @@ import os
 from PIL import Image
 
 
-users_list = ["Caio", "Ze", "Jão", "Manuel"]
+
 
 @app.route('/')
 def home():
@@ -21,6 +21,7 @@ def contact():
 @app.route('/users')
 @login_required
 def users():
+    users_list = User.query.all()
     return render_template('users.html', users_list = users_list)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -84,6 +85,17 @@ def save_img(image):
         
     return new_file_name
 
+def update_courses(form_edit_profile):
+    course_list = []
+    for field in form_edit_profile:
+        if 'course' in field.name:
+            if field.data:
+                course_list.append(field.label.text)    
+    
+    return (';'.join(course_list))
+            
+            
+
 @app.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
 def profile_edit():
@@ -91,9 +103,10 @@ def profile_edit():
     if form_edit_profile.validate_on_submit():
         current_user.email = form_edit_profile.email.data
         current_user.username = form_edit_profile.username.data
-        if form_edit_profile.profile_image:
+        if form_edit_profile.profile_image.data:
             image_name = save_img(form_edit_profile.profile_image.data)
             current_user.profile_photo = image_name
+        current_user.courses = update_courses(form_edit_profile)
         database.session.commit()
         flash(f"Profile successfully updated!", 'alert-success')
         return (redirect(url_for('profile')))
