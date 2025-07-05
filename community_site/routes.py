@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash, abort
 from community_site import app, database, bcrypt
 from community_site.forms import FormLogin, FormCreateAccount, FormEditProfile, FormCreatePost
 from community_site.models import User, Post
@@ -12,7 +12,7 @@ from PIL import Image
 
 @app.route('/')
 def home():
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.id.desc())
     return render_template("home.html", posts = posts)
 
 @app.route('/contact')
@@ -125,3 +125,36 @@ def profile_edit():
     
     profile_image = url_for('static', filename = 'images/{}'.format(current_user.profile_photo))
     return render_template('profile_edit.html', profile_photo = profile_image, form_edit_profile = form_edit_profile)
+
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
+def show_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        form_edit_post = FormCreatePost()
+        if request.method == 'GET':
+            form_edit_post.title.data = post.title
+            form_edit_post.body.data = post.body
+        elif form_edit_post.validate_on_submit():
+            post.title = form_edit_post.title.data
+            post.body = form_edit_post.body.data
+            database.session.commit()
+            flash("Post updated", "alert-success")
+            return redirect(url_for('home'))
+        
+    else:
+        form_edit_post = None
+    return render_template('post.html', post = post, form_edit_post = form_edit_post)
+
+
+@app.route('/post/<post_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        database.session.delete(post)
+        database.session.commit()
+        flash("Post deleted", "alert-danger")
+        return redirect(url_for('home'))
+    else:
+        abort(403)
