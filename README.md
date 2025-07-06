@@ -137,7 +137,7 @@ community_site/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/sobreiracaio/Flask_Bootstrap_webpage.git
    cd community_site
    ```
 
@@ -218,14 +218,6 @@ This application is ready for Railway deployment:
 - `POST /post/<id>/delete` - Delete post (author only)
 - `GET /users` - All users listing
 - `GET /contact` - Contact information
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
 
 ## License
 
